@@ -1,30 +1,24 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
+import { request } from "../api/request";
+
 import ImgSlider from "./ImgSlider";
-import Movies from "./Movies";
+import Row from "./Row";
+import SearchBar from "./SearchBar";
 import Viewers from "./Viewers";
-import { db } from "./../firebase/firebase";
-import { collection, getDocs } from "firebase/firestore";
-import { useDispatch } from "react-redux";
-import { setMovies } from "../features/moviesSlice";
 const Home = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const fetch = async () => {
-      const querySnapshot = await getDocs(collection(db, "movies"));
-      const data = [];
-      querySnapshot.forEach((doc) => {
-        data.push({ id: doc.id, ...doc.data() });
-      });
-      dispatch(setMovies(data));
-    };
-    fetch();
-  }, [dispatch]);
   return (
     <Container>
       <ImgSlider />
       <Viewers />
-      <Movies />
+      <SearchBar />
+      <Row title="trending" url={request.fetchTrending} />
+      <Row title="Original" url={request.fetchNetflixOriginals} />
+      <Row title="Top Rate" url={request.fetchTopRated} />
+      <Row title="Action Movies" url={request.fetchActionMovies} />
+      <Row title="Horror Movies" url={request.fetchHorrorMovies} />
+      <Row title="Romances Movies" url={request.fetchRomanceMovies} />
+      <Row title="Documentaries" url={request.fetchDocumentaries} />
     </Container>
   );
 };

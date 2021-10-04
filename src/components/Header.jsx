@@ -2,13 +2,9 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import styled, { css } from "styled-components";
-import {
-  selectUserName,
-  selectUserPhoto,
-  setUserLogin,
-  setUserLogout,
-} from "../features/userSlice";
+import { selectUserName, selectUserPhoto } from "../features/userSlice";
 import { auth, provider } from "../firebase/firebase";
+import { setUserLogin, setUserLogout } from "./../features/userAction";
 import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 const Header = () => {
   const userName = useSelector(selectUserName);
@@ -48,7 +44,6 @@ const Header = () => {
   };
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      // user will return null if sign out
       if (user) {
         dispatch(
           setUserLogin({
@@ -97,7 +92,9 @@ const Header = () => {
               <span>SERIES</span>
             </a>
           </NavMenu>
+
           <Hamburger onClick={onToggleHandler} toggle={toggle}></Hamburger>
+
           <UserImg src={`${userPhoto}`} />
           <SignOutButton onClick={onSignOut}>Sign out</SignOutButton>
         </Fragment>
@@ -117,6 +114,8 @@ const Nav = styled.nav`
   width: 100vw;
   /* overflow-x: hidden; */
   z-index: 1000;
+  left: 0;
+  top: 0;
 
   @media (max-width: 900px) {
     justify-content: space-between;
@@ -174,11 +173,11 @@ const NavMenu = styled.div`
     ${({ toggle }) => {
       if (toggle) {
         return css`
-          transform: translateX(100%);
+          transform: translateX(0);
         `;
       } else {
         return css`
-          transform: translateX(0);
+          transform: translateX(100%);
         `;
       }
     }}
